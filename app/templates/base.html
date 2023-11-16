@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeConnect</title>
+    <link rel="stylesheet" href="../static/css/styles.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="container">
+                <a href="/" class="logo">CodeConnect</a>
+                <ul class="nav-links">
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Forum</a></li>
+                    <li><a href="#">Tutors</a></li>
+                    <li><a href="#">Resources</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container">
+        {% block content %}
+        <!-- Content specific to each page will go here -->
+        {% endblock %}
+    </main>
+
+    <footer>
+        <p>&copy; 2023 CodeConnect</p>
+    </footer>
+</body>
+</html>
