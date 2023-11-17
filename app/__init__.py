@@ -20,6 +20,7 @@ def load_user(user_id):
     return User.get(user_id)
 def create_app(config_class=Config):
     app = Flask(__name__)
+    app.secret_key = "cringe"
     app.config.from_object(config_class)
     db.init_app(app)
     login_manager.init_app(app)

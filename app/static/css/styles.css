@@ -122,7 +122,23 @@ footer {
     flex-grow: 1; /* Allows the logo container to grow */
     text-align: left; /* Aligns logo to the left */
 }
+.container a {
+    text-decoration: none; /* Removes underline from links */
+    color: #007bff; /* Link color */
+    font-weight: bold; /* Makes the text bold */
+    transition: color 0.3s ease-in-out; /* Smooth transition for color change */
+}
 
+.container a:hover, 
+.container a:focus {
+    color: #00703C; /* Changes color on hover or focus */
+    text-decoration: underline; /* Adds underline on hover or focus */
+}
+
+/* Optional: Style for visited links */
+.container a:visited {
+    color: #6c757d; /* Color for visited links */
+}
 @media (max-width: 768px) {
     .nav-links, .logo {
         float: none;
