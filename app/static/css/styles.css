@@ -115,6 +115,8 @@ footer {
     width: 100px;
     height: 100px;
     object-fit: cover;
+    border-radius: 50%;
+
 }
 .logo-container {
     flex-grow: 1; /* Allows the logo container to grow */

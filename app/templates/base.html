@@ -3,7 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CodeConnect</title>
+    <title>{% block title %}{% endblock %}
+    </title>
     <link rel="stylesheet" href="../static/css/styles.css">
 </head>
 <body>
@@ -14,11 +15,14 @@
                     <img src="../static/img/CompanyLogo.png" class="logo"></img>
                 </div>
                 <ul class="nav-links">
-                    <li><a href="#">Home</a></li>
-                    <li><a href="#">Forum</a></li>
-                    <li><a href="#">Tutors</a></li>
-                    <li><a href="#">Resources</a></li>
-                    <li><a href="#">Contact</a></li>
+                    <li><a href="/">Home</a></li>
+                    <li><a href="/forum">Forum</a></li>
+                    <li><a href="/list_tutors">Tutors</a></li>
+                    <li><a href="/list_courses">Courses</a></li>
+                    <li><a href="/about">About</a></li>
+                    <li><a href="/contact">Contact</a></li>
+                    <li><a href="/auth/login">Login</a></li>
+
                 </ul>
             </div>
         </nav>
