@@ -4,6 +4,13 @@ from flask_login import LoginManager
 from flask_migrate import Migrate
 from config import Config
 from .main.routes import main
+from .auth.routes import auth
+from .courses.routes import courses
+from .forum.routes import forum
+from .tutoring.routes import tutoring
+from .user.routes import user
+
+
 # Initialize the extensions
 #db = SQLAlchemy()
 #login_manager = LoginManager()
@@ -21,20 +28,13 @@ def create_app(config_class=Config):
 
     # Import and register blueprints
     app.register_blueprint(main)
+    app.register_blueprint(auth, url_prefix='/auth')
+    app.register_blueprint(courses, url_prefix='/courses')
+    app.register_blueprint(forum, url_prefix='/forum')
+    app.register_blueprint(tutoring, url_prefix='/tutoring')
+    app.register_blueprint(user, url_prefix='/user')
 
-    #from app.auth import auth as auth_blueprint
-    #app.register_blueprint(auth_blueprint, url_prefix='/auth')
 
-    #from app.courses import courses as courses_blueprint
-    #app.register_blueprint(courses_blueprint, url_prefix='/courses')
-
-    #from app.forum import forum as forum_blueprint
-    #app.register_blueprint(forum_blueprint, url_prefix='/forum')
-
-    #from app.tutoring import tutoring as tutoring_blueprint
-    #app.register_blueprint(tutoring_blueprint, url_prefix='/tutoring')
-
-    #from app.errors import errors as errors_blueprint
     #app.register_blueprint(errors_blueprint)
 
     # Return the app instance
