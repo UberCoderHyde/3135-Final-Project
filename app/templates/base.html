@@ -9,8 +9,10 @@
 <body>
     <header>
         <nav class="navbar">
-            <div class="container">
-                <a href="/" class="logo">CodeConnect</a>
+            <div class="nav-container">
+                <div class="logo-container">
+                    <img src="../static/img/CompanyLogo.png" class="logo"></img>
+                </div>
                 <ul class="nav-links">
                     <li><a href="#">Home</a></li>
                     <li><a href="#">Forum</a></li>
@@ -21,12 +23,10 @@
             </div>
         </nav>
     </header>
-
-    <main class="container">
-        {% block content %}
-        <!-- Content specific to each page will go here -->
-        {% endblock %}
-    </main>
+    {% block content %}
+    <!-- Content specific to each page will go here -->
+    {% endblock %}
+    
 
     <footer>
         <p>&copy; 2023 CodeConnect</p>

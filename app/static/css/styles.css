@@ -28,6 +28,15 @@ body {
     z-index: 1000;
 }
 
+.nav-container {
+    display: flex; /* Use flexbox */
+    justify-content: space-between; /* Space items evenly */
+    align-items: center; /* Center items vertically */
+    width: 90%;
+    max-width: 1100px;
+    margin: auto;
+    overflow: hidden;
+}
 .container {
     width: 90%;
     max-width: 1100px;
@@ -37,7 +46,6 @@ body {
     margin-top: 20px; /* Margin from the header */
     margin-bottom: 20px; /* Margin from the footer */
 }
-
 .logo {
     float: left;
     font-size: 1.5rem;
@@ -60,10 +68,31 @@ body {
     padding: 5px 10px;
     border-radius: 5px;
     transition: background-color 0.3s;
+    position: relative; /* Needed for absolute positioning of pseudo-elements */
 }
 
-.nav-links a:hover {
-    background-color: rgba(255, 255, 255, 0.3);
+/* Underline effect for active/hover state */
+.nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -5px; /* Adjust as needed */
+    left: 0;
+    width: 0;
+    height: 2px; /* Thickness of the underline */
+    background-color: #fff; /* Color of the underline */
+    transition: width 0.3s; /* Smooth transition for the effect */
+}
+
+/* Expand underline on hover */
+.nav-links a:hover::after,
+.nav-links a:focus::after { /* Focus for keyboard navigation */
+    width: 100%;
+}
+
+/* Optional: Active Link Style */
+/* You can add a class to the active link in your HTML and style it here */
+.nav-links a.active::after {
+    width: 100%;
 }
 
 /* Main Styles */
@@ -81,6 +110,15 @@ footer {
     padding: 20px 0;
     background: #333;
     color: #fff;
+}
+.logo {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+}
+.logo-container {
+    flex-grow: 1; /* Allows the logo container to grow */
+    text-align: left; /* Aligns logo to the left */
 }
 
 @media (max-width: 768px) {
