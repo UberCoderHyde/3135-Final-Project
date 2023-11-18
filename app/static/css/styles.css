@@ -1,5 +1,5 @@
-/* Basic Reset */
-* {
+ /* Basic Reset */
+ * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -29,6 +29,8 @@ body {
 }
 
 .nav-container {
+    z-index: 1000; /* Even higher z-index for the dropdown to ensure it's on top */
+
     display: flex; /* Use flexbox */
     justify-content: space-between; /* Space items evenly */
     align-items: center; /* Center items vertically */
@@ -60,6 +62,7 @@ body {
 .nav-links li {
     display: inline;
     margin-left: 20px;
+    position: relative;
 }
 
 .nav-links a {
@@ -137,7 +140,7 @@ footer {
 
 /* Optional: Style for visited links */
 .container a:visited {
-    color: #6c757d; /* Color for visited links */
+    color: #B3A369; /* Color for visited links */
 }
 @media (max-width: 768px) {
     .nav-links, .logo {
@@ -153,4 +156,66 @@ footer {
         display: block;
         margin: 5px 0;
     }
+}
+/* Style for the dropdown trigger */
+.nav-links .dropdown {
+
+    position: relative; /* Needed for absolute positioning of dropdown content */
+    /* Add any additional styling to match the other nav items, if necessary */
+}
+
+/* Style for the dropdown content */
+.dropdown-content {
+    margin-top: 15px; /* Add a gap between the dropdown and the navbar */
+
+    display: none; /* Initially hidden */
+    position: absolute; /* Positioned relative to its parent */
+    top: 100%; /* Directly below the dropdown trigger */
+    left: 0;
+    background-color: #f9f9f9; /* Light background for the dropdown */
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2); /* Shadow for depth */
+    z-index: 2000; /* Ensure it's on top of other elements */
+}
+
+/* Style for the dropdown links */
+.dropdown-content a {
+    color: black; /* Text color for dropdown items */
+    padding: 12px 16px; /* Padding for dropdown items */
+    text-decoration: none; /* No underline for links */
+    display: block; /* Block display for proper alignment */
+    transition: background-color 0.3s; /* Smooth background color transition on hover */
+}
+
+
+/* Hover effect for dropdown items */
+.dropdown-content a:hover {
+    background-color: #ddd; /* Light grey background on hover */
+}
+
+
+.nav-container, .navbar, .dropdown {
+    overflow: visible; /* Make sure overflow does not clip the dropdown */
+    /* ... other styles ... */
+}
+.dropdown-toggle {
+    color: #fff; /* Set the color of the arrow to white */
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 1rem; /* Adjust the font size as needed */
+    padding: 0; /* Adjust padding as needed */
+
+}
+
+/* Initially hide the dropdown content */
+.dropdown-content {
+    display: none;
+    /* ... other styles ... */
+}
+
+/* Optional: Style for when dropdown is active */
+.dropdown.active .dropdown-content {
+    display: block;
 }

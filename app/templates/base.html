@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}{% endblock %}
-    </title>
+    <title>{% block title %}{% endblock %}</title>
     <link rel="stylesheet" href="../static/css/styles.css">
 </head>
 <body>
@@ -15,14 +14,40 @@
                     <img src="../static/img/CompanyLogo.png" class="logo"></img>
                 </div>
                 <ul class="nav-links">
-                    <li><a href="/">Home</a></li>
-                    <li><a href="/forum/forum">Forum</a></li>
-                    <li><a href="/tutoring/list_tutors">Tutors</a></li>
-                    <li><a href="/courses/list_courses">Courses</a></li>
-                    <li><a href="/about">About</a></li>
-                    <li><a href="/contact">Contact</a></li>
-                    <li><a href="/auth/login">Login</a></li>
+                    {% if current_user.is_authenticated %}
+                        <li style="float: left;">Hi {{ current_user.username }}!&nbsp &nbsp</li>
+                    {% endif %}
+                    <li class="dropdown">
+                        <a href="/home">Home</a>
+                        <button class="dropdown-toggle">&#9662;</button> <!-- Separate clickable arrow -->
 
+                        <div class="dropdown-content">
+                            <a href="/about">About</a>
+                            <a href="/contact">Contact</a>
+
+                        </div>
+                    </li>
+                    <li>
+                        <a href="/forum/forum">Forum</a>
+                    </li>
+                    <li>
+                        <a href="/tutoring/list_tutors">Tutors</a>
+                    </li>
+                    <li>
+                        <a href="/courses/list_courses">Courses</a>
+                    </li>
+                    {% if current_user.is_authenticated %}
+                    <li>
+                        <a href="/user/profile">Profile</a>
+                    </li>
+                    <li>
+                        <a href="/auth/logout">Logout</a>
+                    </li>
+                    {% else %}
+                    <li>
+                        <a href="/auth/login">Login</a>
+                    </li>
+                    {% endif %}
                 </ul>
             </div>
         </nav>
@@ -30,10 +55,33 @@
     {% block content %}
     <!-- Content specific to each page will go here -->
     {% endblock %}
-    
-
     <footer>
-        <p>&copy; 2023 CodeConnect</p>
+        <p>&copy;2023 CodeConnect</p>
     </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Select all dropdown toggle buttons
+            var dropdownToggles = document.querySelectorAll('.navbar .dropdown-toggle');
+    
+            // Add click event listener to each toggle
+            dropdownToggles.forEach(function(toggle) {
+                toggle.addEventListener('click', function(e) {
+                    e.preventDefault(); // Prevent default button behavior
+    
+                    // Toggle the 'active' class on the parent <li>
+                    this.parentElement.classList.toggle('active');
+                });
+            });
+    
+            // Close dropdowns when clicking outside
+            window.addEventListener('click', function(e) {
+                if (!e.target.matches('.navbar .dropdown-toggle')) {
+                    dropdownToggles.forEach(function(toggle) {
+                        toggle.parentElement.classList.remove('active');
+                    });
+                }
+            });
+        });
+    </script>
 </body>
 </html>

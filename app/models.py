@@ -2,9 +2,8 @@ from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin
-
-db = SQLAlchemy()
-
+from flask import app
+from .extensions import db
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(64), index=True, unique=True)
@@ -13,13 +12,15 @@ class User(UserMixin, db.Model):
     profile = db.relationship('Profile', backref='user', uselist=False)
     posts = db.relationship('ForumPost', backref='author', lazy='dynamic')
     events = db.relationship('Event', backref='organizer', lazy='dynamic')
-    sessions = db.relationship('TutoringSession', backref='tutor', lazy='dynamic')
-
+    is_tutor = db.Column(db.Boolean, default=False)  # Indicates if the user is available for tutoring
+    sessions = db.relationship('TutoringSession', foreign_keys='TutoringSession.tutor_id', backref='tutor', lazy='dynamic')
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
-
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
+    def __init__(self, username, email):
+        self.username = username
+        self.email = email
 
 class Profile(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
