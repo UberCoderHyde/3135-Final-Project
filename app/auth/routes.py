@@ -26,10 +26,11 @@ def login():
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
-        user = User(username=form.username.data, email=form.email.data)
+        user = User(username=form.username.data, email=form.email.data,is_tutor=form.is_tutor.data)
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
+
         flash('Congratulations, you are now a registered user!')
         return redirect(url_for('auth.login'))  # Redirect to login page after registration
     return render_template('auth/register.html', title='Register', form=form)

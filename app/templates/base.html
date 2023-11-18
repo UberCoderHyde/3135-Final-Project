@@ -32,6 +32,10 @@
                     </li>
                     <li>
                         <a href="/tutoring/list_tutors">Tutors</a>
+                        {% if current_user.is_tutor %}
+                        {% endif %}
+                        {% endif %}
+
                     </li>
                     <li>
                         <a href="/courses/list_courses">Courses</a>

@@ -20,6 +20,10 @@
                 {{ form.password.label }}<br>
                 {{ form.password(size=32) }}
             </p>
+            <p>
+                {{ form.is_tutor.label }}<br>
+                {{ form.is_tutor() }}  <!-- Render the is_tutor checkbox -->
+            </p>
             <p>{{ form.submit() }}</p>
         </form></div>
 </main>
