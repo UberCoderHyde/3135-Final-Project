@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<main class="container">
+    <div class="container">
+        <h2>Logout</h2>
+        <h3>Logout <a href="{{ url_for('auth.logout') }}">Click Here</a> </h3>
+</div>
+</main>
+{% endblock %}
