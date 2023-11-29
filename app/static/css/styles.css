@@ -219,3 +219,29 @@ footer {
 .dropdown.active .dropdown-content {
     display: block;
 }
+
+.login-button {
+    background-color: #00703C; /* Green background */
+    color: white; /* White text */
+    padding: 15px 20px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 5px; /* Rounded corners */
+    cursor: pointer;
+    width: 100%;
+    transition: all 0.3s ease-in-out; /* Smooth transition for hover and focus effects */
+    font-size: 16px; /* Larger font size */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Subtle shadow for depth */
+}
+
+.login-button:hover, .login-button:focus {
+    background-color: #005a30; /* Slightly darker green on hover/focus */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Larger shadow on hover/focus for a "lifting" effect */
+    outline: none; /* Removes the outline on focus */
+}
+
+/* Optional: Change the cursor to a 'not-allowed' sign if the button is disabled */
+.login-button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}

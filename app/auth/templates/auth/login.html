@@ -16,7 +16,7 @@
                 {{ form.password.label }}<br>
                 {{ form.password(size=32) }}
             </p>
-            <p>{{ form.submit() }}</p>
+            <button type="submit" class="login-button">Register</button>
         </form>
         <br>
         <h3>Need to register <a href="{{ url_for('auth.register') }}">Click Here</a> </h3>
