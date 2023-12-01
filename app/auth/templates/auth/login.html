@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Home{% endblock %}
+{% block title %}Login{% endblock %}
 
 {% block content %}
 <main class="container">
@@ -8,18 +8,27 @@
         <h2>Login</h2>
         <form action="{{ url_for('auth.login') }}" method="post">
             {{ form.hidden_tag() }}
-            <p>
+
+            <div class="form-group">
                 {{ form.username.label }}<br>
-                {{ form.username(size=32) }}
-            </p>
-            <p>
+                {{ form.username(size=32, class="form-control") }}
+                {% if form.username.errors %}
+                    <span class="error">{{ form.username.errors[0] }}</span>
+                {% endif %}
+            </div>
+
+            <div class="form-group">
                 {{ form.password.label }}<br>
-                {{ form.password(size=32) }}
-            </p>
-            <button type="submit" class="login-button">Register</button>
+                {{ form.password(size=32, class="form-control") }}
+                {% if form.password.errors %}
+                    <span class="error">{{ form.password.errors[0] }}</span>
+                {% endif %}
+            </div>
+
+            <button type="submit" class="login-button">Login</button>
         </form>
         <br>
         <h3>Need to register <a href="{{ url_for('auth.register') }}">Click Here</a> </h3>
-</div>
+    </div>
 </main>
 {% endblock %}

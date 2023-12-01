@@ -18,36 +18,36 @@
                         <li style="float: left;">Hi {{ current_user.username }}!&nbsp &nbsp</li>
                     {% endif %}
                     <li class="dropdown">
-                        <a href="/app/main/templates/main/home.html">Home</a>
+                        <a href="{{ url_for('main.index') }}">Home</a>
                         <button class="dropdown-toggle">&#9662;</button>
 
                         <div class="dropdown-content">
-                            <a href="/app/main/templates/main/about.html">About</a>
-                            <a href="/app/main/templates/main/contact.html">Contact</a>
+                            <a href="{{ url_for('main.about') }}">About</a>
+                            <a href="{{ url_for('main.contact') }}">Contact</a>
                         </div>
                     </li>
                     <li>
-                        <a href="/app/forum/templates/forum/forum.html">Forum</a>
+                        <a href="{{ url_for('forum.forum_home') }}">Forum</a>
                     </li>
                     <li>
-                        <a href="/app/tutoring/templates/tutoring/list_tutors.html">Tutors</a>
+                        <a href="{{ url_for('tutoring.list_tutors') }}">Tutors</a>
                         {% if current_user.is_tutor %}
                             <!-- Additional content for tutors goes here -->
                         {% endif %}
                     </li>
                     <li>
-                        <a href="/app/courses/templates/courses/list_courses.html">Courses</a>
+                        <a href="{{ url_for('courses.list_courses') }}">Courses</a>
                     </li>
                     {% if current_user.is_authenticated %}
                         <li>
-                            <a href="/app/user/templates/user/profile.html">Profile</a>
+                            <a href="{{ url_for('user.profile') }}">Profile</a>
                         </li>
                         <li>
-                            <a href="/app/auth/templates/auth/logout.html">Logout</a>
+                            <a href="{{ url_for('auth.logout') }}">Logout</a>
                         </li>
                     {% else %}
                         <li>
-                            <a href="/app/auth/templates/auth/login.html">Login</a>
+                            <a href="{{ url_for('auth.login') }}">Login</a>
                         </li>
                     {% endif %}
                 </ul>
