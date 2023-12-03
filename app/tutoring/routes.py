@@ -1,16 +1,49 @@
-from flask import render_template, request, Blueprint
-
+from .forms import TutoringSessionForm
+from flask_login import current_user, login_required
+from app.models import Enrollment, TutoringSession, User
+from flask import flash, redirect, render_template, request, Blueprint, url_for
+from app.extensions import db
 from flask import Blueprint
 
-tutoring = Blueprint('tutoring', __name__, template_folder='templates',url_prefix="/tutoring")
+tutoring = Blueprint('tutoring', __name__, template_folder='templates', url_prefix="/tutoring")
+
 @tutoring.route('/list_tutors')
 def list_tutors():
-    return render_template('tutoring/list_tutors.html')
+    tutors = User.query.filter_by(is_tutor=True).all()
+    return render_template('tutoring/list_tutors.html', tutors=tutors)
 
-@tutoring.route('/tutor_profile')
-def tutor_profile():
-    return render_template('tutoring/tutor_profile.html')
+@tutoring.route('/tutor_profile/<int:tutor_id>')
+def tutor_profile(tutor_id):
+    tutor = User.query.get_or_404(tutor_id)
+    sessions = TutoringSession.query.filter_by(tutor_id=tutor_id).all()
+    return render_template('tutoring/tutor_profile.html', tutor=tutor, sessions=sessions)
 
-@tutoring.route('/tutor_session')
-def tutor_session():
-    return render_template('tutoring/tutor_session.html')
+@tutoring.route('/create_session', methods=['GET', 'POST'])
+@login_required
+def create_session():
+    form = TutoringSessionForm()
+    if form.validate_on_submit():
+        new_session = TutoringSession(subject=form.subject.data, session_time=form.session_time.data, location=form.location.data, tutor_id=current_user.id)
+        db.session.add(new_session)
+        db.session.commit()
+        flash('Session created successfully', 'success')
+        return redirect(url_for('tutoring.tutor_profile', tutor_id=current_user.id))
+    return render_template('tutoring/create_session.html', form=form)
+
+@tutoring.route('/tutor_session/<int:session_id>')
+def tutor_session(session_id):
+    session = TutoringSession.query.get_or_404(session_id)
+    enrollments = Enrollment.query.filter_by(session_id=session_id).all()
+    return render_template('tutoring/tutor_session.html', session=session, enrollments=enrollments)
+
+@tutoring.route('/enroll/<int:session_id>', methods=['POST'])
+@login_required
+def enroll(session_id):
+    if not Enrollment.query.filter_by(session_id=session_id, user_id=current_user.id).first():
+        enrollment = Enrollment(session_id=session_id, user_id=current_user.id, status='enrolled')
+        db.session.add(enrollment)
+        db.session.commit()
+        flash('Enrolled in session successfully!', 'success')
+    else:
+        flash('You are already enrolled in this session.', 'info')
+    return redirect(url_for('tutoring.tutor_session', session_id=session_id))

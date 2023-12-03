@@ -10,17 +10,20 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(120), index=True, unique=True)
     password_hash = db.Column(db.String(128))
     profile = db.relationship('Profile', backref='user', uselist=False)
-    posts = db.relationship('ForumPost', backref='author', lazy='dynamic')
     events = db.relationship('Event', backref='organizer', lazy='dynamic')
+    posts = db.relationship('ForumPost', backref='author', lazy='dynamic')
+    comments = db.relationship('Comment', backref='commenter', lazy='dynamic')
     is_tutor = db.Column(db.Boolean, default=False)  # Indicates if the user is available for tutoring
     sessions = db.relationship('TutoringSession', foreign_keys='TutoringSession.tutor_id', backref='tutor', lazy='dynamic')
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
-    def __init__(self, username, email):
+    def __init__(self, username, email, name, is_tutor):  # Add 'name' and any other missing arguments here
         self.username = username
         self.email = email
+        self.name = name
+        self.is_tutor = is_tutor
 
 class Profile(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), primary_key=True)
@@ -40,8 +43,8 @@ class Comment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     body = db.Column(db.Text)
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     post_id = db.Column(db.Integer, db.ForeignKey('forum_post.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
 class Event(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -57,8 +60,7 @@ class TutoringSession(db.Model):
     session_time = db.Column(db.DateTime)
     location = db.Column(db.String(120))
     tutor_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    student_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-
+    enrollments = db.relationship('Enrollment', backref='session', lazy='dynamic')
 class Enrollment(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     session_id = db.Column(db.Integer, db.ForeignKey('tutoring_session.id'))

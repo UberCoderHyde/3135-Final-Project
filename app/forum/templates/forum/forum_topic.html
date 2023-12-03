@@ -1,11 +1,36 @@
 {% extends 'base.html' %}
 
-{% block title %}About{% endblock %}
+{% block title %}Forum Topic{% endblock %}
 
 {% block content %}
 <main class="container">
-    <div class="container">
-    
+    <div class="forum-container">
+        <div class="forum-post">
+            <h2>{{ post.title }}</h2>
+            <p>Posted by: {{ post.author.username }}</p>
+            <p>{{ post.body }}</p>
+        </div>
+        <div class="comments-section">
+            <h3>Comments</h3>
+            {% for comment in comments %}
+                <div class="comment">
+                    <p>{{ comment.commenter.username }} commented:</p>
+                    <p>{{ comment.body }}</p>
+                </div>
+            {% endfor %}
+            <form action="{{ url_for('forum.forum_topic', post_id=post.id) }}" method="post" class="forum-form">
+                {{ form.hidden_tag() }}
+                <div class="form-group">
+                    {{ form.body(class='form-control') }}
+                </div>
+                <button type="submit" class="submit-button">Add Comment</button>
+            </form>
+            {% if post.author == current_user %}  <!-- Only show if the current user is the author -->
+                <form action="{{ url_for('forum.delete_post', post_id=post.id) }}" method="post">
+                    <button type="submit" class="delete-button" onclick="return confirm('Are you sure you want to delete this post and all its comments?');">Delete Post</button>
+                </form>
+            {% endif %}
+        </div>
     </div>
 </main>
 {% endblock %}

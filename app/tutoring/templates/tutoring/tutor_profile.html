@@ -1,11 +1,24 @@
 {% extends 'base.html' %}
 
-{% block title %}About{% endblock %}
+{% block title %}
+Tutor Profile
+{% endblock %}
 
 {% block content %}
 <main class="container">
     <div class="container">
-    
+        <h1>Profile of {{ tutor.username }}</h1>
+        <!-- Display tutor details -->
+        <p>Email: {{ tutor.email }}</p>
+        <!-- Display a list of sessions offered by the tutor -->
+        <h2>Offered Sessions</h2>
+        <ul>
+            {% for session in sessions %}
+            <li>
+                <a href="{{ url_for('tutoring.tutor_session', session_id=session.id) }}">{{ session.subject }}</a> - {{ session.session_time }}
+            </li>
+            {% endfor %}
+        </ul>
     </div>
 </main>
 {% endblock %}

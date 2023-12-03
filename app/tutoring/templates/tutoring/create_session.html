@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Create Tutoring Session
+{% endblock %}
+
+{% block content %}
+<main class="container">
+    <div class="container">
+        <h1>Create a New Tutoring Session</h1>
+        <form method="post">
+            {{ form.hidden_tag() }}
+            <div class="form-group">
+                {{ form.subject.label }} {{ form.subject }}
+            </div>
+            <div class="form-group">
+                {{ form.session_time.label }} {{ form.session_time }}
+            </div>
+            <div class="form-group">
+                {{ form.location.label }} {{ form.location }}
+            </div>
+            <div class="form-group">
+                {{ form.submit }}
+            </div>
+        </form>
+    </div>
+</main>
+{% endblock %}

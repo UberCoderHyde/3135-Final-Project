@@ -1,11 +1,26 @@
 {% extends 'base.html' %}
 
-{% block title %}About{% endblock %}
+{% block title %}
+Tutoring Session Details
+{% endblock %}
 
 {% block content %}
 <main class="container">
     <div class="container">
-    
+        <h1>Session: {{ session.subject }}</h1>
+        <p>Date and Time: {{ session.session_time }}</p>
+        <p>Location: {{ session.location }}</p>
+        <h2>Enrolled Students</h2>
+        <ul>
+            {% for enrollment in enrollments %}
+            <li>{{ enrollment.user.username }}</li>
+            {% endfor %}
+        </ul>
+        <!-- Enrollment Form -->
+        <form method="post" action="{{ url_for('tutoring.enroll', session_id=session.id) }}">
+            {{ enroll_form.hidden_tag() }}
+            {{ enroll_form.submit }}
+        </form>
     </div>
 </main>
 {% endblock %}

@@ -1,11 +1,21 @@
 {% extends 'base.html' %}
 
-{% block title %}About{% endblock %}
+{% block title %}
+List of Tutors
+{% endblock %}
 
 {% block content %}
 <main class="container">
     <div class="container">
-    
+        <h1>List of Tutors</h1>
+        <ul>
+            {% for tutor in tutors %}
+            <li>
+                <a href="{{ url_for('tutoring.tutor_profile', tutor_id=tutor.id) }}">{{ tutor.username }}</a>
+                <!-- Add more tutor details if needed -->
+            </li>
+            {% endfor %}
+        </ul>
     </div>
 </main>
 {% endblock %}

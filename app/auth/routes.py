@@ -2,7 +2,6 @@ from flask import render_template, flash, redirect, url_for, request, Blueprint
 from app.extensions import db
 from .forms import RegistrationForm, LoginForm, ChangePasswordForm
 from app.models import User
-from flask import Blueprint
 from flask_login import current_user, login_required, login_user,logout_user
 auth = Blueprint('auth', __name__, template_folder='templates', url_prefix = "/auth")
 
@@ -26,7 +25,7 @@ def login():
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
-        user = User(username=form.username.data, email=form.email.data,is_tutor=form.is_tutor.data)
+        user = User(username=form.username.data, email=form.email.data, name=form.name.data, is_tutor=form.is_tutor.data)
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
@@ -34,6 +33,7 @@ def register():
         flash('Congratulations, you are now a registered user!')
         return redirect(url_for('auth.login'))  # Redirect to login page after registration
     return render_template('auth/register.html', title='Register', form=form)
+
 
 @auth.route('/reset_password')
 @login_required
