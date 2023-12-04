@@ -25,15 +25,28 @@ def login():
 def register():
     form = RegistrationForm()
     if form.validate_on_submit():
-        user = User(username=form.username.data, email=form.email.data, name=form.name.data, is_tutor=form.is_tutor.data)
+        # Check if the username or email already exists
+        existing_user_by_username = User.query.filter_by(username=form.username.data).first()
+        existing_user_by_email = User.query.filter_by(email=form.email.data).first()
+
+        if existing_user_by_username:
+            flash('This username is already taken. Please choose a different one.', 'error')
+            return render_template('auth/register.html', title='Register', form=form)
+
+        if existing_user_by_email:
+            flash('This email is already in use. Please choose a different one or log in.', 'error')
+            return render_template('auth/register.html', title='Register', form=form)
+
+        # Create new user
+        user = User(username=form.username.data, email=form.email.data, is_tutor=form.is_tutor.data)
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
 
-        flash('Congratulations, you are now a registered user!')
+        flash('Congratulations, you are now a registered user!', 'success')
         return redirect(url_for('auth.login'))  # Redirect to login page after registration
-    return render_template('auth/register.html', title='Register', form=form)
 
+    return render_template('auth/register.html', title='Register', form=form)
 
 @auth.route('/reset_password')
 @login_required

@@ -1,21 +1,38 @@
 {% extends 'base.html' %}
 
 {% block title %}
-List of Tutors
+List of Tutors and Courses
 {% endblock %}
 
 {% block content %}
 <main class="container">
     <div class="container">
-        <h1>List of Tutors</h1>
-        <ul>
+        <h1>List of Tutors and Courses</h1>
+
+        <!-- List of individual tutors -->
+        <h2 class="tutors-title">Tutors</h2>
+        <ul class="tutor-list">
             {% for tutor in tutors %}
-            <li>
-                <a href="{{ url_for('tutoring.tutor_profile', tutor_id=tutor.id) }}">{{ tutor.username }}</a>
-                <!-- Add more tutor details if needed -->
-            </li>
+                <li class="tutor-item">
+                    <a href="{{ url_for('tutoring.tutor_profile', tutor_id=tutor.id) }}">{{ tutor.username }}</a>
+                </li>
             {% endfor %}
         </ul>
+
+        <!-- List of courses with associated tutors -->
+        <h2 class="courses-title">Courses</h2>
+        {% for course in courses_with_tutors %}
+            <div class="course-item">
+                <h3><a href="{{ url_for('courses.course_detail', course_id=course.id) }}">{{ course.name }}</a></h3>
+                <ul class="tutor-list indented">
+                    {% for tutor in course.tutors %}
+                        <li class="tutor-item">
+                            <a href="{{ url_for('tutoring.tutor_profile', tutor_id=tutor.id) }}">{{ tutor.username }}</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endfor %}
     </div>
 </main>
 {% endblock %}

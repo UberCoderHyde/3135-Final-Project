@@ -1,6 +1,6 @@
-from .forms import TutoringSessionForm
+from .forms import CreateTutoringSessionForm, EditTutorProfileForm
 from flask_login import current_user, login_required
-from app.models import Enrollment, TutoringSession, User
+from app.models import Course, Enrollment, TutoringSession, User
 from flask import flash, redirect, render_template, request, Blueprint, url_for
 from app.extensions import db
 from flask import Blueprint
@@ -10,7 +10,8 @@ tutoring = Blueprint('tutoring', __name__, template_folder='templates', url_pref
 @tutoring.route('/list_tutors')
 def list_tutors():
     tutors = User.query.filter_by(is_tutor=True).all()
-    return render_template('tutoring/list_tutors.html', tutors=tutors)
+    courses_with_tutors = Course.query.all()
+    return render_template('tutoring/list_tutors.html', tutors=tutors, courses_with_tutors=courses_with_tutors)
 
 @tutoring.route('/tutor_profile/<int:tutor_id>')
 def tutor_profile(tutor_id):
@@ -21,9 +22,16 @@ def tutor_profile(tutor_id):
 @tutoring.route('/create_session', methods=['GET', 'POST'])
 @login_required
 def create_session():
-    form = TutoringSessionForm()
+    form = CreateTutoringSessionForm() 
+    form.subject.choices = [(course.id, course.name) for course in current_user.courses]
+ # updated to use the correct form class
     if form.validate_on_submit():
-        new_session = TutoringSession(subject=form.subject.data, session_time=form.session_time.data, location=form.location.data, tutor_id=current_user.id)
+        new_session = TutoringSession(
+            subject=form.subject.data,
+            session_time=form.session_time.data,
+            location=form.location.data,
+            tutor_id=current_user.id
+        )
         db.session.add(new_session)
         db.session.commit()
         flash('Session created successfully', 'success')
@@ -47,3 +55,18 @@ def enroll(session_id):
     else:
         flash('You are already enrolled in this session.', 'info')
     return redirect(url_for('tutoring.tutor_session', session_id=session_id))
+
+@tutoring.route('/edit_tutor_profile', methods=['GET', 'POST'])
+@login_required
+def edit_tutor_profile():
+    form = EditTutorProfileForm()
+    if form.validate_on_submit():
+        current_user.description = form.description.data
+        db.session.commit()
+        flash('Your profile has been updated.')
+        return redirect(url_for('tutoring.tutor_profile', tutor_id=current_user.id))
+    
+    elif request.method == 'GET':
+        form.description.data = current_user.description
+
+    return render_template('tutoring/edit_tutor_profile.html', form=form)
