@@ -14,6 +14,13 @@
                 <div class="logo-container">
                     <img src="{{ url_for('static', filename='img/CompanyLogo.png') }}" class="logo" alt="Company Logo">
                 </div>
+                <div class="search-container">
+                    <form action="{{ url_for('main.search_results') }}" method="GET" class="search-form">
+                        <input type="text" placeholder="Search..." name="query" id="search-input" list="search-results-list" class="search-input">
+                        <datalist id="search-results-list"></datalist>
+                        <button type="submit" class="search-button">&#128269;</button>
+                    </form>
+                </div>
                 <ul class="nav-links">
                     {% if current_user.is_authenticated %}
                         <li style="float: left;">Hi {{ current_user.username }}!&nbsp &nbsp</li>
@@ -83,6 +90,33 @@
                 }
             });
         });
+        document.addEventListener('DOMContentLoaded', function() {
+        var searchInput = document.getElementById('search-input');
+        var searchResultsList = document.getElementById('search-results-list');
+
+        searchInput.addEventListener('input', function() {
+            var query = this.value.trim();
+
+            if (query.length === 0) {
+                searchResultsList.innerHTML = ''; // Clear the suggestions if the input is empty
+                return;
+            }
+
+            // Use an AJAX request to fetch search suggestions from the server
+            fetch(`/search-suggestions?query=${encodeURIComponent(query)}`)
+                .then(response => response.json())
+                .then(data => {
+                    // Update the datalist with the fetched suggestions
+                    searchResultsList.innerHTML = '';
+                    data.forEach(function(item) {
+                        var option = document.createElement('option');
+                        option.value = item;
+                        searchResultsList.appendChild(option);
+                    });
+                })
+                .catch(error => console.error('Error fetching search suggestions:', error));
+        });
+    });
     </script>
 </body>
 </html>
