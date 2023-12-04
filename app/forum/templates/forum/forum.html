@@ -1,11 +1,21 @@
 {% extends 'base.html' %}
 
-{% block title %}About{% endblock %}
+{% block title %}Forum{% endblock %}
 
 {% block content %}
 <main class="container">
-    <div class="container">
-    
+    <div class="forum-container">
+        <h1>Forum Topics</h1>
+        <div class="forum-list">
+            {% for post in posts %}
+                <div class="forum-post">
+                    <h3><a href="{{ url_for('forum.forum_topic', post_id=post.id) }}">{{ post.title }}</a></h3>
+                    <p>Posted by: {{ post.author.username }}</p>
+                    <p>{{ post.body | truncate(150) }}</p>
+                </div>
+            {% endfor %}
+        </div>
+        <a href="{{ url_for('forum.new_topic') }}" class="create-topic-button">Create New Topic</a>
     </div>
 </main>
 {% endblock %}

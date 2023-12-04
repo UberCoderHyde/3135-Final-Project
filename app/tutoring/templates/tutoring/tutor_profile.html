@@ -1,11 +1,39 @@
 {% extends 'base.html' %}
 
-{% block title %}About{% endblock %}
+{% block title %}
+Tutor Profile
+{% endblock %}
 
 {% block content %}
 <main class="container">
-    <div class="container">
-    
+    <div class="tutor-profile-container">
+        <h1 class="tutor-profile-title">Profile of {{ tutor.username }}</h1>
+        <div class="tutor-details">
+            <p><strong>Email:</strong> {{ tutor.email }}</p>
+            <p><strong>Description:</strong> {{ tutor.description or 'No description provided.' }}</p>
+        </div>
+
+        <h2 class="courses-title">Courses</h2>
+        <ul class="course-list">
+            {% for course in tutor.courses %}
+                <li class="course-item">
+                    <a href="{{ url_for('courses.course_detail', course_id=course.id) }}">{{ course.name }}</a>
+                </li>
+            {% endfor %}
+        </ul>
+
+        <h2 class="offered-sessions-title">Offered Sessions</h2>
+        <ul class="session-list">
+            {% for session in sessions %}
+                <li class="session-item">
+                    <a href="{{ url_for('tutoring.tutor_session', session_id=session.id) }}">{{ session.subject }}</a> - {{ session.session_time }}
+                </li>
+            {% endfor %}
+        </ul>
+
+        {% if current_user.is_authenticated and current_user.id == tutor.id %}
+            <a href="{{ url_for('tutoring.edit_tutor_profile') }}" class="edit-profile-button">Edit My Profile</a>
+        {% endif %}
     </div>
 </main>
 {% endblock %}

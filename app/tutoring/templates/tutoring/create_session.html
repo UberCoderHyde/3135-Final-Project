@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Create Tutoring Session
+{% endblock %}
+
+{% block content %}
+<main class="container">
+    <div class="session-form-container">
+        <h1 class="session-form-title">Create a New Tutoring Session</h1>
+        <form method="post" class="session-form">
+            {{ form.hidden_tag() }}
+
+            <!-- Subject Field -->
+            <div class="form-group">
+                {{ form.subject.label(class='form-label') }}
+                {{ form.subject(class='form-control') }}
+            </div>
+
+            <!-- Date Field -->
+            <div class="form-group">
+                {{ form.session_date.label(class='form-label') }}
+                {{ form.session_date(class='form-control') }}
+            </div>
+
+            <!-- Time Field -->
+            <div class="form-group">
+                {{ form.session_time.label(class='form-label') }}
+                {{ form.session_time(class='form-control') }}
+            </div>
+
+            <!-- Location Type Field -->
+            <div class="form-group">
+                {{ form.location_type.label(class='form-label') }}
+                {{ form.location_type(id='location_type', class='form-control') }}
+            </div>
+
+            <!-- Location Field -->
+            <div class="form-group">
+                {{ form.location.label(class='form-label') }}
+                {{ form.location(id='location', class='form-control') }}
+            </div>
+
+            <!-- Submit Button -->
+            <div class="form-group">
+                {{ form.submit(class='submit-button') }}
+            </div>
+        </form>
+    </div>
+</main>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        let locationTypeSelect = document.getElementById('location_type');
+        let locationInput = document.getElementById('location');
+
+        function updateLocationPlaceholder() {
+            if (locationTypeSelect.value === 'in_person') {
+                locationInput.placeholder = 'Where will it be located?';
+            } else {
+                locationInput.placeholder = 'Put the link for the meeting here ex. (Google Meets, Zoom, etc.)';
+            }
+        }
+
+        locationTypeSelect.addEventListener('change', updateLocationPlaceholder);
+        updateLocationPlaceholder(); // Initial update on page load
+    });
+</script>
+{% endblock %}

@@ -1,11 +1,29 @@
 {% extends 'base.html' %}
 
-{% block title %}About{% endblock %}
+{% block title %}
+List of Courses
+{% endblock %}
 
 {% block content %}
 <main class="container">
-    <div class="container">
-    
+    <div class="course-list-container">
+        <h1>List of Courses</h1>
+        <div class="spacer" style="height: 10px;"></div>
+
+        <!-- Create Course Button for Tutors -->
+        {% if current_user.is_authenticated and current_user.is_tutor %}
+            <div class="">
+                <a href="{{ url_for('courses.add_course') }}" class="create-course-button">Create Course</a>
+            </div>
+        {% endif %}
+        <ul class="course-list">
+            {% for course in courses %}
+            <li>
+                <a href="{{ url_for('courses.course_detail', course_id=course.id) }}">{{ course.name }}</a>
+            </li>
+            <div class="spacer" style="height: 8px;"></div>
+            {% endfor %}
+        </ul>
     </div>
 </main>
 {% endblock %}

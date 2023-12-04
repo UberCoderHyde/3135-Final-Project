@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{% endblock %}</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='img/CompanyLogo.png') }}">
 </head>
 <body>
     <header>
@@ -13,41 +14,48 @@
                 <div class="logo-container">
                     <img src="{{ url_for('static', filename='img/CompanyLogo.png') }}" class="logo" alt="Company Logo">
                 </div>
+                <div class="search-container">
+                    <form action="{{ url_for('main.search_results') }}" method="GET" class="search-form">
+                        <input type="text" placeholder="Search..." name="query" id="search-input" list="search-results-list" class="search-input">
+                        <datalist id="search-results-list"></datalist>
+                        <button type="submit" class="search-button">&#128269;</button>
+                    </form>
+                </div>
                 <ul class="nav-links">
                     {% if current_user.is_authenticated %}
                         <li style="float: left;">Hi {{ current_user.username }}!&nbsp &nbsp</li>
                     {% endif %}
                     <li class="dropdown">
-                        <a href="/app/main/templates/main/home.html">Home</a>
+                        <a href="{{ url_for('main.index') }}">Home</a>
                         <button class="dropdown-toggle">&#9662;</button>
 
                         <div class="dropdown-content">
-                            <a href="/app/main/templates/main/about.html">About</a>
-                            <a href="/app/main/templates/main/contact.html">Contact</a>
+                            <a href="{{ url_for('main.about') }}">About</a>
+                            <a href="{{ url_for('main.contact') }}">Contact</a>
                         </div>
                     </li>
                     <li>
-                        <a href="/app/forum/templates/forum/forum.html">Forum</a>
+                        <a href="{{ url_for('forum.forum_home') }}">Forum</a>
                     </li>
                     <li>
-                        <a href="/app/tutoring/templates/tutoring/list_tutors.html">Tutors</a>
+                        <a href="{{ url_for('tutoring.list_tutors') }}">Tutors</a>
                         {% if current_user.is_tutor %}
                             <!-- Additional content for tutors goes here -->
                         {% endif %}
                     </li>
                     <li>
-                        <a href="/app/courses/templates/courses/list_courses.html">Courses</a>
+                        <a href="{{ url_for('courses.list_courses') }}">Courses</a>
                     </li>
                     {% if current_user.is_authenticated %}
                         <li>
-                            <a href="/app/user/templates/user/profile.html">Profile</a>
+                            <a href="{{ url_for('user.profile') }}">Profile</a>
                         </li>
                         <li>
-                            <a href="/app/auth/templates/auth/logout.html">Logout</a>
+                            <a href="{{ url_for('auth.logout') }}">Logout</a>
                         </li>
                     {% else %}
                         <li>
-                            <a href="/app/auth/templates/auth/login.html">Login</a>
+                            <a href="{{ url_for('auth.login') }}">Login</a>
                         </li>
                     {% endif %}
                 </ul>
@@ -82,6 +90,33 @@
                 }
             });
         });
+        document.addEventListener('DOMContentLoaded', function() {
+        var searchInput = document.getElementById('search-input');
+        var searchResultsList = document.getElementById('search-results-list');
+
+        searchInput.addEventListener('input', function() {
+            var query = this.value.trim();
+
+            if (query.length === 0) {
+                searchResultsList.innerHTML = ''; // Clear the suggestions if the input is empty
+                return;
+            }
+
+            // Use an AJAX request to fetch search suggestions from the server
+            fetch(`/search-suggestions?query=${encodeURIComponent(query)}`)
+                .then(response => response.json())
+                .then(data => {
+                    // Update the datalist with the fetched suggestions
+                    searchResultsList.innerHTML = '';
+                    data.forEach(function(item) {
+                        var option = document.createElement('option');
+                        option.value = item;
+                        searchResultsList.appendChild(option);
+                    });
+                })
+                .catch(error => console.error('Error fetching search suggestions:', error));
+        });
+    });
     </script>
 </body>
 </html>
