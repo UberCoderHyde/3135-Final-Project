@@ -3,9 +3,31 @@
 {% block title %}Profile{% endblock %}
 
 {% block content %}
-<main class="container">
-    <div class="container">
-    
+<main class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <h2>{{ user.username }}'s Profile</h2>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <!-- Display user profile picture -->
+                            <img src="{{ user.profile_picture.url }}" alt="{{ user.username }} Profile Picture" class="img-fluid rounded">
+                        </div>
+                        <div class="col-md-8">
+                            <!-- Display user information -->
+                            <ul class="list-group">
+                                <li class="list-group-item"><strong>Username:</strong> {{ user.username }}</li>
+                                <li class="list-group-item"><strong>Email:</strong> {{ user.email }}</li>
+                                <!-- Add more profile information fields as needed -->
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </main>
 {% endblock %}
