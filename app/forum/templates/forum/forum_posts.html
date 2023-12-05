@@ -1,17 +1,20 @@
 {% extends 'base.html' %}
 
-{% block title %}Forum{% endblock %}
+{% block title %}Forum Posts{% endblock %}
 
 {% block content %}
 <main class="container">
     <div class="forum-container">
-        <h1>Forum Topics</h1>
+        <h1>{{ forum.title }} Posts</h1>
         <div class="forum-list">
             {% for post in posts %}
                 <div class="forum-post">
                     <h3><a href="{{ url_for('forum.forum_topic', post_id=post.id) }}">{{ post.title }}</a></h3>
                     <p>Posted by: {{ post.author.username }}</p>
                     <p>{{ post.body | truncate(150) }}</p>
+                    {% if post.course %}
+                        <p>Related Course: {{ post.course.name }}</p>
+                    {% endif %}
                 </div>
             {% endfor %}
         </div>

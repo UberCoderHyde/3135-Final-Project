@@ -68,5 +68,4 @@ def edit_tutor_profile():
     
     elif request.method == 'GET':
         form.description.data = current_user.description
-
     return render_template('tutoring/edit_tutor_profile.html', form=form)

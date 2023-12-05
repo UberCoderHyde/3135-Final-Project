@@ -1,13 +1,22 @@
 from flask import render_template, request, redirect, url_for, flash, Blueprint
-from .forms import ForumPostForm, CommentForm
-from app.models import ForumPost, Comment, User
+from .forms import ForumForm, ForumPostForm, CommentForm
+from app.models import Forum, ForumPost, Comment, User
 from flask_login import current_user, login_required
 from app.extensions import db
-forum = Blueprint('forum', __name__, template_folder='templates',url_prefix="/forum")
+
+forum = Blueprint('forum', __name__, template_folder='templates', url_prefix="/forum")
+
 @forum.route('/forum')
 def forum_home():
-    posts = ForumPost.query.order_by(ForumPost.timestamp.desc()).all()
-    return render_template('forum/forum.html', posts=posts)
+    forums = Forum.query.all()
+    return render_template('forum/forum_home.html', forums=forums)
+
+
+@forum.route('/forum/<int:forum_id>')
+def forum_posts(forum_id):
+    forum = Forum.query.get_or_404(forum_id)
+    posts = ForumPost.query.filter_by(forum_id=forum.id).order_by(ForumPost.timestamp.desc()).all()
+    return render_template('forum/forum_posts.html', forum=forum, posts=posts)
 
 @forum.route('/forum_topic/<int:post_id>', methods=['GET', 'POST'])
 def forum_topic(post_id):
@@ -20,17 +29,28 @@ def forum_topic(post_id):
         db.session.commit()
         return redirect(url_for('forum.forum_topic', post_id=post_id))
     return render_template('forum/forum_topic.html', post=post, comments=comments, form=form)
-
-@forum.route('/new_topic', methods=['GET', 'POST'])
-@login_required
-def new_topic():
-    form = ForumPostForm()
+@forum.route('/new_forum', methods=['GET', 'POST'])
+def new_forum():
+    form = ForumForm()  # Use the appropriate form for creating a new forum
     if form.validate_on_submit():
-        post = ForumPost(title=form.title.data, body=form.body.data, user_id=current_user.id)
+        forum = Forum(title=form.name.data, description=form.description.data, user_id=current_user.id)
+        db.session.add(forum)
+        db.session.commit()
+        flash('Forum created successfully!', 'success')
+        return redirect(url_for('forum.forum_home'))
+
+    return render_template('forum/new_forum.html', form=form)
+@forum.route('/new_topic/<int:forum_id>', methods=['GET', 'POST'])
+@login_required
+def new_topic(forum_id):
+    form = ForumPostForm()
+    forum = Forum.query.get_or_404(forum_id)
+    if form.validate_on_submit():
+        post = ForumPost(title=form.title.data, body=form.body.data, user_id=current_user.id, forum_id=forum.id)
         db.session.add(post)
         db.session.commit()
-        return redirect(url_for('forum.forum_home'))
-    return render_template('forum/new_topic.html', form=form)
+        return redirect(url_for('forum.forum_posts', forum_id=forum.id))
+    return render_template('forum/new_topic.html', form=form, forum=forum)
 
 @forum.route('/delete_post/<int:post_id>', methods=['POST'])
 @login_required

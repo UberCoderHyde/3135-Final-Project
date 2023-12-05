@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}New Forum{% endblock %}
+
+{% block content %}
+  <main class="container">
+    <h1>Create a New Forum</h1>
+    <form method="post" action="{{ url_for('forum.new_forum') }}">
+      {{ form.hidden_tag() }}
+      <div class="form-group">
+        {{ form.name.label(class="form-label") }}
+        {{ form.name(class="form-control") }}
+      </div>
+      <div class="form-group">
+        {{ form.description.label(class="form-label") }}
+        {{ form.description(class="form-control") }}
+      </div>
+      <button type="submit" class="submit-button">Create Forum</button>
+    </form>
+  </main>
+{% endblock %}

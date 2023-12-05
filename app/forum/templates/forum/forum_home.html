@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block title %}Forum Home{% endblock %}
+
+{% block content %}
+<main class="container">
+    <div class="forum-container">
+        <h1>Forum Topics</h1>
+        <div class="forum-list">
+            {% for forum_item in forums %}
+                <div class="forum-post">
+                    <h3><a href="{{ url_for('forum.forum_posts', forum_id=forum_item.id) }}">{{ forum_item.title }}</a></h3>
+                    <p>Description: {{ forum_item.description }}</p>
+                </div>
+            {% endfor %}
+        </div>
+        <a href="{{ url_for('forum.new_forum') }}" class="create-topic-button">Add Forum</a>
+    </div>
+</main>
+{% endblock %}
