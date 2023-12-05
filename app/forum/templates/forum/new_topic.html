@@ -6,7 +6,7 @@
 <main class="container">
     <div class="forum-container">
         <h1>Create a New Topic</h1>
-        <form action="{{ url_for('forum.new_topic') }}" method="post" class="forum-form">
+        <form action="{{ url_for('forum.new_topic', forum_id=forum.id) }}" method="post" class="forum-form">
             {{ form.hidden_tag() }}
             <div class="form-group">
                 {{ form.title.label }}<br>
