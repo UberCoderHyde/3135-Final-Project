@@ -9,7 +9,9 @@ user = Blueprint('user', __name__, template_folder='templates',url_prefix="/user
 
 @user.route('/profile/<int:user_id>')
 def user_profile(user_id):
-    tutor = User.query.get_or_404(user_id)
+    user = User.query.get_or_404(user_id)
+    if user.is_tutor==True:
+        return redirect(url_for('tutoring.tutor_profile', tutor_id=user.id))
     return render_template('user/profile.html', user=user)
 @user.route('/edit_profile', methods=['GET', 'POST'])
 @login_required

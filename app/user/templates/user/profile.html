@@ -7,12 +7,14 @@ Profile
 {% block content %}
 <main class="container">
     <div class="tutor-profile-container">
-        <h1 class="tutor-profile-title">Profile of {{ current_user.username }}</h1>
+        <h1 class="tutor-profile-title">Profile of {{ user.username }}</h1>
         <div class="tutor-details">
-            <p><strong>Email:</strong> {{ current_user.email }}</p>
-            <p><strong>Description:</strong> {{ current_user.description or 'No description provided.' }}</p>
+            <p><strong>Email:</strong> {{ user.email }}</p>
+            <p><strong>Description:</strong> {{ user.description or 'No description provided.' }}</p>
         </div>
-        <a href="{{ url_for('user.edit_profile') }}" class="edit-profile-button">Edit My Profile</a>
+        {% if current_user.is_authenticated and current_user.id == user.id %}
+            <a href="{{ url_for('user.edit_profile') }}" class="edit-profile-button">Edit My Profile</a>
+        {% endif %}
     </div>
 </main>
 {% endblock %}
