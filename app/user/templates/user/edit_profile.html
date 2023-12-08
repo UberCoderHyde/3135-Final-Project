@@ -1,38 +1,26 @@
 {% extends 'base.html' %}
 
-{% block title %}Edit Profile{% endblock %}
+{% block title %}
+Edit Profile
+{% endblock %}
 
 {% block content %}
 <main class="container">
-    <div class="row justify-content-center mt-5">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">Edit Profile</div>
-
-                <div class="card-body">
-                    <!-- Add your edit profile form here -->
-                    <form method="POST" action="{% url 'edit_profile' %}">
-                        {% csrf_token %}
-                        <!-- Include form fields for editing profile information -->
-                        <div class="form-group">
-                            <label for="username">Username</label>
-                            <input type="text" id="username" name="username" class="form-control" value="{{ user.username }}" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="email">Email</label>
-                            <input type="email" id="email" name="email" class="form-control" value="{{ user.email }}" required>
-                        </div>
-
-                        <!-- Add more fields as needed -->
-
-                        <div class="form-group">
-                            <button type="submit" class="btn btn-primary">Save Changes</button>
-                        </div>
-                    </form>
-                </div>
+    <div class="edit-profile-container">
+        <h1 class="edit-profile-title">Edit Your Profile</h1>
+        <form method="post" class="edit-profile-form">
+            {{ form.hidden_tag() }}
+            <div class="form-group">
+                {{ form.description.label(class='form-label') }}
+                {{ form.description(rows=4, class='form-control') }}
+                {% if form.description.errors %}
+                    <div class="error">{{ form.description.errors[0] }}</div>
+                {% endif %}
             </div>
-        </div>
+            <div class="form-group">
+                {{ form.submit(class='submit-button') }}
+            </div>
+        </form>
     </div>
 </main>
 {% endblock %}
