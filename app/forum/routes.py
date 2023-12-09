@@ -29,6 +29,8 @@ def forum_topic(post_id):
         db.session.commit()
         return redirect(url_for('forum.forum_topic', post_id=post_id))
     return render_template('forum/forum_topic.html', post=post, comments=comments, form=form)
+
+@login_required
 @forum.route('/new_forum', methods=['GET', 'POST'])
 def new_forum():
     form = ForumForm()  # Use the appropriate form for creating a new forum
