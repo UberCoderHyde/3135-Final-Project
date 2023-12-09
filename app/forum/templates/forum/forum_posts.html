@@ -20,13 +20,13 @@
         </div>
         
         {% if current_user.is_authenticated and current_user == forum.user %}
-            <!-- Add the delete form for the entire forum -->
             <form action="{{ url_for('forum.delete_forum', forum_id=forum.id) }}" method="post" class="delete-form">
                 <button type="submit" class="delete-button">Delete Forum</button>
             </form>
         {% endif %}
-        
-        <a href="{{ url_for('forum.new_topic', forum_id=forum_id) }}" class="create-topic-button">Create New Topic</a>
+        {% if current_user.is_authenticated%}
+            <a href="{{ url_for('forum.new_topic', forum_id=forum_id) }}" class="create-topic-button">Create New Topic</a>
+        {% endif %}
     </div>
 </main>
 {% endblock %}
