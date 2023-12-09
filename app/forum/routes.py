@@ -30,8 +30,9 @@ def forum_topic(post_id):
         return redirect(url_for('forum.forum_topic', post_id=post_id))
     return render_template('forum/forum_topic.html', post=post, comments=comments, form=form)
 
-@login_required
 @forum.route('/new_forum', methods=['GET', 'POST'])
+@login_required
+
 def new_forum():
     form = ForumForm()  # Use the appropriate form for creating a new forum
     if form.validate_on_submit():
