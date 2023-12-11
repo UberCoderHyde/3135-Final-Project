@@ -4,12 +4,11 @@ from wtforms.validators import DataRequired
 from wtforms.validators import Length
 
 class CreateTutoringSessionForm(FlaskForm):
-    subject = SelectField('Subject', coerce=int, validators=[DataRequired()])
+    subject = SelectField('Subject',choices=[], coerce=int, validators=[DataRequired()])
     session_date = DateField('Session Date', format='%Y-%m-%d', validators=[DataRequired()])
     session_time = SelectField('Session Time', coerce=str, validators=[DataRequired()])
     location_type = SelectField('Location Type', choices=[('in_person', 'In-Person'), ('online', 'Online')], validators=[DataRequired()])
     location = StringField('Location', validators=[DataRequired()])    
-    course = SelectField('Course', coerce=int, validators=[DataRequired()])  # Dynamically populate with courses
     submit = SubmitField('Create Session')
 
     def __init__(self, *args, **kwargs):

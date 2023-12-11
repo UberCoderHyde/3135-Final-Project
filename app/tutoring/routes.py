@@ -1,9 +1,10 @@
-from .forms import CreateTutoringSessionForm, EditTutorProfileForm
+from .forms import CreateTutoringSessionForm, EditTutorProfileForm, EnrollmentForm
 from flask_login import current_user, login_required
 from app.models import Course, Enrollment, TutoringSession, User
 from flask import flash, redirect, render_template, request, Blueprint, url_for
 from app.extensions import db
 from flask import Blueprint
+from datetime import datetime
 
 tutoring = Blueprint('tutoring', __name__, template_folder='templates', url_prefix="/tutoring")
 
@@ -24,13 +25,16 @@ def tutor_profile(tutor_id):
 def create_session():
     form = CreateTutoringSessionForm() 
     form.subject.choices = [(course.id, course.name) for course in current_user.courses]
- # updated to use the correct form class
+    form.session_time.choices = form.generate_time_slots()
+    print("Session Time Choices:")
     if form.validate_on_submit():
+        session_time_str = form.session_time.data
+        session_time = datetime.strptime(session_time_str, '%I:%M %p')
         new_session = TutoringSession(
             subject=form.subject.data,
-            session_time=form.session_time.data,
+            session_time=session_time,
             location=form.location.data,
-            tutor_id=current_user.id
+            tutor_id=current_user.id,
         )
         db.session.add(new_session)
         db.session.commit()
@@ -42,7 +46,8 @@ def create_session():
 def tutor_session(session_id):
     session = TutoringSession.query.get_or_404(session_id)
     enrollments = Enrollment.query.filter_by(session_id=session_id).all()
-    return render_template('tutoring/tutor_session.html', session=session, enrollments=enrollments)
+    enroll_form = EnrollmentForm()  # Create an instance of EnrollmentForm
+    return render_template('tutoring/tutor_session.html', session=session, enrollments=enrollments, enroll_form=enroll_form)
 
 @tutoring.route('/enroll/<int:session_id>', methods=['POST'])
 @login_required
